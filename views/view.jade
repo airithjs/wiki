@@ -1,0 +1,16 @@
+extends layout
+
+block content
+	br
+	div
+		div.container
+			div.row
+				div.col-md-9
+					div.panel.panel-default
+						div.panel-heading
+							h1=post.title
+						div.panel-body
+							!{doc}
+						div.panel-footer
+							a(href='/edit/'+post.title)
+								button.btn.btn-default(type='button') Edit

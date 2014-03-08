@@ -1,0 +1,26 @@
+extends layout
+
+block content
+	script(src='/javascripts/editor.js')
+	div.container
+		br
+		form(role='form', action='/save', method='post')
+			div.row(style='hegiht:400px;')
+				div.col-md-6
+					div(style='height:42px;')
+						input.form-control(type='text', name='title', placeholder='title', value=title)
+					div.edit
+						textarea#editor.form-control( name='doc')=post
+				div.col-md-6
+					div
+						ul.nav.nav-tabs
+							li.active
+								a preview
+							li 
+								a images
+					div.edit_left
+						div#preview(style='overflow:scroll;')
+							!{doc}
+			div.row
+				div.col-md-12
+					button.btn.btn-info(type='submit') SAVE
