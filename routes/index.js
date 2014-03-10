@@ -1,8 +1,6 @@
+exports.routes = function(app,db,passport){
+	var user = require('../models/user')(db);
 
-var user = require('../models/user');
-
-
-exports.routes = function(app,passport){
 	app.get('/', function(req, res){
   	res.render('index', {});
 	});

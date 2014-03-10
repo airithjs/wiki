@@ -5,6 +5,7 @@
 
 var express = require('express');
 var routes = require('./routes');
+var db = require('./models/connect').connect;
 
 var http = require('http');
 var path = require('path');
@@ -41,14 +42,14 @@ if ('development' == app.get('env')) {
 }
 
 //module setting
-var User = require('./models/user');
+var User = require('./models/user')(db);
 passport.use(new LocalStrategy(User.authenticate));
 passport.serializeUser(function(user,done){done(null,user)});
 passport.deserializeUser(function(user,done){done(null,user)});
 console.log("Init Passport");
 
-var Index = require('./routes/index').routes(app,passport);
-var PostController = require('./routes/post').routes(app);
+var Index = require('./routes/index').routes(app,db,passport);
+var PostController = require('./routes/post').routes(app,db);
 
 
 http.createServer(app).listen(app.get('port'), function(){

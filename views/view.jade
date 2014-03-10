@@ -1,16 +1,16 @@
 extends layout
 
 block content
-	br
+	script(src='/javascripts/view.js')
 	div
-		div.container
+		div.container.bs-docs-container
 			div.row
-				div.col-md-9
+				div.col-md-10(role='main')
 					div.panel.panel-default
 						div.panel-heading
 							h1=post.title
 						div.panel-body
-							!{doc}
+							!= doc
 						div.panel-footer
 							a(href='/edit/'+post.title)
 								button.btn.btn-default(type='button') Edit

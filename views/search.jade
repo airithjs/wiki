@@ -1,0 +1,15 @@
+extends layout
+
+block content
+	div.container
+		br
+		div.alert.alert-info
+			span
+				a(href='/view/query/') '#{query}'
+			span 의 검색 결과입니다.
+		each post in list
+			h3
+				a(href='/view/' + post.title ) #{post.title}
+			p #{post.doc.substring(0,100)}
+
+		
