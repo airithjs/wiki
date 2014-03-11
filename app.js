@@ -4,8 +4,8 @@
  */
 
 var express = require('express');
-var routes = require('./routes');
-var db = require('./models/connect').connect;
+//var routes = require('./routes');
+
 
 var http = require('http');
 var path = require('path');
@@ -13,6 +13,8 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 var app = express();
+var env = app.get('env') || 'development';
+var db = require('./models/connect').connect(env);
 
 // all environments
 app.set('port', process.env.PORT || 3000);

@@ -1,0 +1,25 @@
+{
+	"dev": {
+		"driver" : "mysql",
+		"host": "localhost",
+		"user": "root",
+		"password": "",
+		"database": "wiki_dev"
+	},
+
+	"test": {
+		"driver" : "mysql",
+		"host": "localhost",
+		"user": "root",
+		"password": "",
+		"database": "wiki_test"
+	},
+
+	"production": {
+		"driver" : "mysql",
+		"host": "localhost",
+		"user": "root",
+		"password": "",
+		"database": "wiki"
+	}
+}

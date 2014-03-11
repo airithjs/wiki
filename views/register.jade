@@ -1,19 +1,27 @@
 extends layout
 
 block content
+	script(src='/javascripts/register.js')
 	div.container
 		br
 		br
 		h1 Register
 		form(role='form', action='/register', method='post', style='max-width:300px;')
-			.form-group
-				input.form-control(type='text', name='username', placeholder='Enter User Name')
-			.form-group
-				input.form-control(type='text', name='userid', placeholder='User ID')
-			.form-group
-				input.form-control(type='password', name='password', placeholder='Password')
-			.form-group
-				input.form-control(type='email', name='email', placeholder='email')
-			button.btn.btn-default(type='submit') Submit
+			.form-group#nameForm
+				label.control-label(for='username') User Name
+				input#username.form-control(type='text', name='username', placeholder='Enter User Name')
+			.form-group#idForm
+				label.control-label(for='userid') User ID
+				input#userid.form-control(type='text', name='userid', placeholder='User ID')
+			.form-group#passwordForm
+				label.control-label(for='password') Password
+				input#password.form-control(type='password', name='password', placeholder='Password')
+				br
+				input#passwordcheck.form-control(type='password', name='passwordcheck', placeholder='Repeat Password')
+			.form-group#emailForm
+				label.control-label(for='email') E-mail
+				input#email.form-control(type='email', name='email', placeholder='email')
+			button#submit_register.btn.btn-default(type='submit', disabled='disabled') SAVE
+			| &nbsp
 			a(href='/')
-				button.btn.btn-btn-default(type='button') Cancel
+				button.btn.btn-default(type='button') Cancel
