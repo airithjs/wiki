@@ -33,12 +33,24 @@ function convertMarkdown(string){
 	return result;
 }
 
-function changePreview(){
-	$('#preview').html(convertMarkdown($('#editor').val()));
+function changeSubTab(dom){
+	var name = dom.attr("name");
+	$('#subtab li').removeClass('active');
+	$('#subtab li.' + name).addClass('active');
+	$('.edit_left div').hide();
+	$('.edit_left div#' + name).show();
 }
 
+
 $(function(){
-	$('#editor').keyup(changePreview);
+	$('#editor').keyup(function(){
+		$('#preview').html(convertMarkdown($('#editor').val()));
+	});
 	blockTabKey($('#editor'));
 	scrollSync();
+
+	$('#subtab > li').click(function(){
+		var clickedTab = $(this);
+		changeSubTab(clickedTab);
+	});
 });

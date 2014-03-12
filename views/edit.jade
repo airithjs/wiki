@@ -1,6 +1,7 @@
 extends layout
 
 block content
+	script(src='/javascripts/marked.js')
 	script(src='/javascripts/editor.js')
 	div.container
 		br
@@ -16,14 +17,16 @@ block content
 						textarea#editor.form-control( name='doc')=post
 				div.col-md-6
 					div
-						ul.nav.nav-tabs
-							li.active
+						ul#subtab.nav.nav-tabs
+							li.preview.active(name='preview')
 								a preview
-							li 
+							li.images(name='images')
 								a images
 					div.edit_left
 						div#preview(style='overflow:scroll;')
 							!= doc
+						div#images(style='display:none')
+							p ImageTab
 			div.row
 				br
 				div.col-md-12
