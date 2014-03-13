@@ -1,3 +1,13 @@
+function insertStrOnCursor(dom,string){
+	var index = dom[0].selectionStart;
+	var data = dom.val();
+	var front = data.substring(0,index);
+	var back = data.substring(index, data.length);
+	dom.val(front + string + back);
+	dom[0].selectionStart = index + string.length;
+	dom[0].selectionEnd = index + string.length;
+}
+
 function blockTabKey(dom){
 	dom.keydown(function(e){
 		var key = e.keycode || e.which;
@@ -39,6 +49,17 @@ function changeSubTab(dom){
 	$('#subtab li.' + name).addClass('active');
 	$('.edit_left div').hide();
 	$('.edit_left div#' + name).show();
+	if( name == 'images'){
+		var title= $('#title').val();
+		$('#images').load('/images/' + title);
+	}
+}
+
+function imageInsert(){
+	$('.thumnail button').click(function(){
+		var filepath = $(this).attr('href');
+		alert(filepath);
+	});
 }
 
 
@@ -48,9 +69,14 @@ $(function(){
 	});
 	blockTabKey($('#editor'));
 	scrollSync();
+	imageInsert();
 
 	$('#subtab > li').click(function(){
 		var clickedTab = $(this);
 		changeSubTab(clickedTab);
+	});
+
+	$('#submit').click(function(){
+		$('#title').removeAttr('disabled');		
 	});
 });

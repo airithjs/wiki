@@ -1,7 +1,12 @@
 var post = module.exports = function(db){
 	return{
+		read: function(title,callback){
+			db.query('SELECT * FROM posts WHERE title = ? limit 1;',
+				[title], callback);
+		},
+
 		save: function(title,userid,doc,callback){
-			post.read(title,function(err,vals){
+			this.read(title,function(err,vals){
 				if(err) throw err;
 				if(vals.length <= 0){
 					db.query('INSERT INTO posts SET title = ?, userid = ?, doc = ?, rev = 1', 
@@ -13,10 +18,6 @@ var post = module.exports = function(db){
 			});
 		},
 
-		read: function(title,callback){
-			db.query('SELECT * FROM posts WHERE title = ? limit 1;',
-				[title], callback);
-		},
 
 		search: function(string,callback){
 			db.query('SELECT * FROM posts WHERE title like "%' + string + '%"', [], callback);

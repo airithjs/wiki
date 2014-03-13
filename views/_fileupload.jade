@@ -1,0 +1,8 @@
+script(src='/javascripts/jquery.min.js')
+div
+	form#fileUploadForm(role='form', method='post', action='/image/upload', enctype='multipart/form-data')
+		input(type='text', name='title')
+		input(type='file', name='uploadFile')
+		input(type='text', name='tag', placeholder='파일에 대한 설명을 남길 수 있습니다.', size='50')
+		button.btn.btn-default(type='submit') Upload
+	div

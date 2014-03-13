@@ -10,9 +10,9 @@ block content
 				div.col-md-6
 					div(style='height:42px;')
 						if(title == null)
-							input.form-control(type='text', name='title', placeholder='title', value='')
+							input#title.form-control(type='text', name='title', placeholder='title', value='')
 						else
-							input.form-control(type='text', name='title', placeholder='title', value=title, disabled='disabled')
+							input#title.form-control(type='text', name='title', placeholder='title', value=title, disabled='disabled')
 					div.edit
 						textarea#editor.form-control( name='doc')=post
 				div.col-md-6
@@ -25,9 +25,9 @@ block content
 					div.edit_left
 						div#preview(style='overflow:scroll;')
 							!= doc
-						div#images(style='display:none')
+						div#images(style='overflow:scroll;display:none')
 							p ImageTab
 			div.row
 				br
 				div.col-md-12
-					button.btn.btn-info(type='submit') SAVE
+					button#submit.btn.btn-info(type='submit') SAVE

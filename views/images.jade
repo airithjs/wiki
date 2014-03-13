@@ -1,0 +1,16 @@
+script.
+	$(function(){
+		$('.thumbnail button').click(function(){
+			var filepath = $(this).attr('href');
+			var markdownStr = "![](" + filepath + ")";
+			alert(markdownStr);
+			insertStrOnCursor($('#editor'),markdownStr);
+		});
+	});
+
+
+-for i in images
+	div.thumbnail(style='width:220px;')
+		img.img-rounded(src='/uploadfiles/#{i.title}/#{i.name}', alt='i.tag', width='200px', height='200px')
+		div.caption.text-center
+			button.btn.btn-success.btn-sm(type='button',href='/uploadfiles/#{i.title}/#{i.name}') INSERT

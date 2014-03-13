@@ -1,4 +1,5 @@
 var marked = require('marked');
+var fs = require('fs');
 
 function markdownConvert(string){
 	var rowString = string.replace(/\t/g, "    ");
@@ -9,6 +10,7 @@ function markdownConvert(string){
 
 exports.routes = function(app,db){
 	var Post = require('../models/post')(db);
+	var File = require('../models/file')(db);
 
 	app.get('/edit', function(req,res){
 		if(!req.user) res.redirect('/');
@@ -34,6 +36,8 @@ exports.routes = function(app,db){
 	app.post('/save', function(req,res){
 		if(!req.user) res.redirect('/');
 		else{
+			console.log(req.body);
+			console.log(req.params);
 			Post.save(req.body.title, req.user.userid,req.body.doc,function(err,vals){
 				res.redirect('/view/' + req.body.title);
 			});
@@ -67,6 +71,42 @@ exports.routes = function(app,db){
 				res.render('search', {query: req.body.query, list: vals});
 			});
 		}
+	});
+
+	app.get('/images/:title', function(req,res){
+		//if(!req.user) res.redirect('/');
+		//else{
+			File.images(req.params.title,function(err,vals){
+				console.log(vals);
+				res.render('images', {user: req.user, images: vals});
+			});
+		//}
+	});
+
+	app.get('/fileup/upload',function(req,res){
+			res.render('_fileupload');
+	});
+
+	app.post('/file/upload', function(req,res){
+		var filename = req.files.uploadFile.name;
+		var type = req.files.uploadFile.type;
+		var tag = req.body.tag;
+		var title = (req.body.title || "unknown").replace(" " , "") ;
+		var path = __dirname + "/../public/uploadfiles/" + title + "/";
+
+		File.upload(filename,type,tag,title,function(err,data){
+			if(err) throw err;
+		});
+		console.log(path);
+		fs.mkdir(path,0777,function(err){
+			fs.readFile(req.files.uploadFile.path,function(err,data){
+				fs.writeFile(path + filename, data, function(err){
+					if(err) throw err;
+					res.send({result: true});
+				});
+			});
+		});
+		
 	});
 
 }
