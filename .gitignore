@@ -1,6 +1,7 @@
 # node module ignore
 
 /node_modules
+/public/uploadfiles
 
 # temp files
 .DS_Store

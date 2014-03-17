@@ -73,21 +73,23 @@ exports.routes = function(app,db){
 		}
 	});
 
-	app.get('/images/:title', function(req,res){
+	app.get('/images/:title?', function(req,res){
 		//if(!req.user) res.redirect('/');
 		//else{
 			File.images(req.params.title,function(err,vals){
 				console.log(vals);
-				res.render('images', {user: req.user, images: vals});
+				res.render('images', {user: req.user, title: req.params.title, images: vals});
 			});
 		//}
 	});
 
-	app.get('/fileup/upload',function(req,res){
+	app.get('/file/upload',function(req,res){
 			res.render('_fileupload');
 	});
 
 	app.post('/file/upload', function(req,res){
+		console.log(req)
+		console.log(req.files)
 		var filename = req.files.uploadFile.name;
 		var type = req.files.uploadFile.type;
 		var tag = req.body.tag;

@@ -1,16 +1,18 @@
-script.
-	$(function(){
-		$('.thumbnail button').click(function(){
-			var filepath = $(this).attr('href');
-			var markdownStr = "![](" + filepath + ")";
-			alert(markdownStr);
-			insertStrOnCursor($('#editor'),markdownStr);
-		});
-	});
+script(src='/javascripts/jquery.min.js')
+script(src='/javascripts/images.js')
 
-
--for i in images
-	div.thumbnail(style='width:220px;')
-		img.img-rounded(src='/uploadfiles/#{i.title}/#{i.name}', alt='i.tag', width='200px', height='200px')
-		div.caption.text-center
-			button.btn.btn-success.btn-sm(type='button',href='/uploadfiles/#{i.title}/#{i.name}') INSERT
+div
+	div.row
+		div.col-md-8
+			input#image_query.form-control(type='text', name='query', placeholder='검색어를 입력하세요.', values='#{title}')
+		div.col-md-4
+			button#searchImageBtn.btn.btn-default.btn-sm(type='button') Search
+			| &nbsp
+			button#uploadImageBtn.btn.btn-default.btn-sm(type='button',data-toggle="modal", data-target="#fileUploadModal") Upload
+	div
+		-for i in images
+			div.thumbnail(style='width:250px;height:300px;float:left;margin:5px;')
+				div(style='width:240px;height:240px;overflow:hidden;margin:5px;')
+					img.img-rounded(src='/uploadfiles/#{i.title}/#{i.name}', alt='i.tag', width='230px', height='240px')
+				div.caption.text-center
+					button.btn.btn-success.btn-sm(type='button',href='/uploadfiles/#{i.title}/#{i.name}') INSERT
