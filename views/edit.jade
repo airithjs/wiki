@@ -7,6 +7,7 @@ block content
 		br
 		form(role='form', action='/save', method='post')
 			div.row(style='hegiht:400px;')
+				input(type='hidden', name='rev', value=rev)
 				div.col-md-6
 					div(style='height:42px;')
 						if(title == null)
@@ -14,7 +15,7 @@ block content
 						else
 							input#title.form-control(type='text', name='title', placeholder='title', value=title, disabled='disabled')
 					div.edit
-						textarea#editor.form-control( name='doc')=post
+						textarea#editor.form-control( name='doc' )=post
 				div.col-md-6
 					div
 						ul#subtab.nav.nav-tabs

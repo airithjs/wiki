@@ -11,43 +11,27 @@ function markdownConvert(string){
 exports.routes = function(app,db){
 	var Post = require('../models/post')(db);
 	var File = require('../models/file')(db);
+	var Backup = require('../models/backup')(db);
 
-	app.get('/edit', function(req,res){
-		if(!req.user) res.redirect('/');
-		else res.render('edit', {user: req.user, title: null, post: null});
-	});
-
-	app.get('/edit/:title', function(req,res){
-		if(!req.user) res.redirect('/');
+	app.get('/edit/:title?', function(req,res){
+		var title = req.params.title || null;
+		if(!req.user || title == null) res.redirect('/');
 		else{
-			var title = req.params.title;
-
 			Post.read(title,function(err,vals){
 				if(vals.length <= 0){
-					res.render('edit', {user: req.user, title: title, post: null});
+					res.render('edit', {user: req.user, title: title, post: null, rev: 0});
 				}else{
 					var htmlStr = markdownConvert(vals[0].doc);
-					res.render('edit', {user: req.user, title: title, post: vals[0].doc, doc: htmlStr});
+					res.render('edit', {user: req.user, title: title, post: vals[0].doc, rev: vals[0].rev, doc: htmlStr});
 				}
 			});
 		}
 	});
 
-	app.post('/save', function(req,res){
-		if(!req.user) res.redirect('/');
+	app.get('/view/:title?', function(req,res){
+		if( !req.user ) res.redirect('/');
 		else{
-			console.log(req.body);
-			console.log(req.params);
-			Post.save(req.body.title, req.user.userid,req.body.doc,function(err,vals){
-				res.redirect('/view/' + req.body.title);
-			});
-		}
-	});
-
-	app.get('/view/:title', function(req,res){
-		if(!req.user) res.redirect('/');
-		else{
-			var title = req.params.title;
+			var title = req.params.title || 'main';
 			Post.read(title,function(err,vals){
 				if(vals.length <= 0){
 					res.redirect('/edit/' + title);
@@ -59,9 +43,21 @@ exports.routes = function(app,db){
 		}
 	});
 
-	app.get('/view', function(req,res){
+	app.post('/save', function(req,res){
 		if(!req.user) res.redirect('/');
-		else res.redirect('/view/main');
+		else{
+			var form = req.body;
+			var currentRev = parseInt(form.rev);
+			console.log(form);
+			console.log(req.user);
+			Backup.save(form.title, req.user.username, form.doc, currentRev + 1, function(err,vals){
+				if(err) console.log("ERROR: Backup failed");
+			});
+
+			Post.save(form.title, req.user.username, form.doc ,function(err,vals){
+				res.redirect('/view/' + req.body.title);
+			});
+		}
 	});
 
 	app.post('/search', function(req,res){
@@ -74,17 +70,13 @@ exports.routes = function(app,db){
 	});
 
 	app.get('/images/:title?', function(req,res){
-		//if(!req.user) res.redirect('/');
-		//else{
+		if(!req.user) res.redirect('/');
+		else{
 			File.images(req.params.title,function(err,vals){
 				console.log(vals);
 				res.render('images', {user: req.user, title: req.params.title, images: vals});
 			});
-		//}
-	});
-
-	app.get('/file/upload',function(req,res){
-			res.render('_fileupload');
+		}
 	});
 
 	app.post('/file/upload', function(req,res){

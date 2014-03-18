@@ -10,7 +10,7 @@ exports.routes = function(app,db,passport){
 	});
 
 	app.post('/register', function(req,res){
-		user.register(req.body.userid,req.body.username, req.body.password, req.body.email, function(err,vals){
+		user.register(req.body.userid, req.body.username, req.body.password, req.body.email, function(err,vals){
 			res.redirect('/');
 		});
 	});
