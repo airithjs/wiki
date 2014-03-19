@@ -79,8 +79,9 @@ exports.routes = function(app,db){
 		var tag = req.body.tag;
 		var title = (req.body.title || "unknown").replace(" " , "") ;
 		var path = __dirname + "/../public/uploadfiles/" + title + "/";
+		var info = req.body.info;
 
-		File.upload(filename,type,tag,title,function(err,data){
+		File.upload(filename,type,tag,title,info,function(err,data){
 			if(err) throw err;
 		});
 

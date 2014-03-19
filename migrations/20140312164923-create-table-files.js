@@ -7,8 +7,17 @@ exports.up = function(db, callback) {
 		type: 'string',
 		name: 'string',
 		tag: 'string',
-		title: 'string'
-	}, callback);
+		title: 'string',
+		info: 'string'
+	}, function(){
+		db.addIndex('files', 'idx_title', 'title', false, function(){
+			console.log("Create Index for Title");
+		});
+		db.addIndex('files', 'idx_tag', 'tag', false, function(){
+			console.log("Create Index for Tag");
+		});
+		callback();
+	});
 };
 
 exports.down = function(db, callback) {

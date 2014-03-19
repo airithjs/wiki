@@ -8,7 +8,9 @@ exports.up = function(db, callback) {
 		title: 'string',
 		userid: 'string',
 		doc: 'text',
-	}, callback);
+	}, function(){
+		db.addIndex('backups', 'idx_title', 'title', false, callback);
+	});
 };
 
 exports.down = function(db, callback) {

@@ -10,10 +10,7 @@ block content
 				input(type='hidden', name='rev', value=rev)
 				div.col-md-6
 					div(style='height:42px;')
-						if(title == null)
-							input#title.form-control(type='text', name='title', placeholder='title', value='')
-						else
-							input#title.form-control(type='text', name='title', placeholder='title', value=title, disabled='disabled')
+						input#title.form-control(type='text', name='title', placeholder='title', value=title, disabled='disabled')
 					div.edit
 						textarea#editor.form-control( name='doc' )=post
 				div.col-md-6
