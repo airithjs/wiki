@@ -52,11 +52,11 @@ exports.routes = function(app,db){
 	app.post('/save', IsAuthenticated, function(req,res){
 		var form = req.body;
 		var currentRev = parseInt(form.rev);
-		Backup.save(form.title, req.user.username, form.doc, currentRev + 1, function(err,vals){
+		Backup.save(form.title, req.user.userid, form.doc, currentRev + 1, function(err,vals){
 			if(err) console.log("ERROR: Backup failed");
 		});
 
-		Post.save(form.title, req.user.username, form.doc ,function(err,vals){
+		Post.save(form.title, req.user.userid, form.doc ,function(err,vals){
 			res.redirect('/view/' + req.body.title);
 		});
 	});

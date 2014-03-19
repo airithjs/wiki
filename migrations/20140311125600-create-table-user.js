@@ -5,9 +5,10 @@ exports.up = function(db, callback) {
 	db.createTable('users', {
 		id: { type: 'int', primaryKey: true, autoIncrement: true},
 		username: 'string',
-		userid: {type: 'int', unique: true},
+		userid: {type: 'string', unique: true},
 		password: 'string',
-		email: 'string'
+		email: 'string',
+		auth_lv: { type: 'int', defaultValue: 0}
 	}, callback );
 };
 
