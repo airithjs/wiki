@@ -8,14 +8,23 @@ function markdownConvert(string){
 	return result.replace(regExp, "<a href='/view/$1'>$1</a>");
 }
 
+function IsAuthenticated(req,res,next){
+  if(req.user){
+      next();
+  }else{
+      //next(new Error(401));
+      res.redirect('/');
+  }
+}
+
 exports.routes = function(app,db){
 	var Post = require('../models/post')(db);
 	var File = require('../models/file')(db);
 	var Backup = require('../models/backup')(db);
 
-	app.get('/edit/:title?', function(req,res){
+	app.get('/edit/:title?', IsAuthenticated, function(req,res){
 		var title = req.params.title || null;
-		if(!req.user || title == null) res.redirect('/');
+		if( title == null) res.redirect('/view');
 		else{
 			Post.read(title,function(err,vals){
 				if(vals.length <= 0){
@@ -28,60 +37,43 @@ exports.routes = function(app,db){
 		}
 	});
 
-	app.get('/view/:title?', function(req,res){
-		if( !req.user ) res.redirect('/');
-		else{
-			var title = req.params.title || 'main';
-			Post.read(title,function(err,vals){
-				if(vals.length <= 0){
-					res.redirect('/edit/' + title);
-				}else{
-					var htmlStr = markdownConvert(vals[0].doc);
-					res.render('view', {user: req.user, post: vals[0], doc: htmlStr });
-				}
-			});
-		}
+	app.get('/view/:title?', IsAuthenticated, function(req,res){
+		var title = req.params.title || 'main';
+		Post.read(title,function(err,vals){
+			if(vals.length <= 0){
+				res.redirect('/edit/' + title);
+			}else{
+				var htmlStr = markdownConvert(vals[0].doc);
+				res.render('view', {user: req.user, post: vals[0], doc: htmlStr });
+			}
+		});
 	});
 
-	app.post('/save', function(req,res){
-		if(!req.user) res.redirect('/');
-		else{
-			var form = req.body;
-			var currentRev = parseInt(form.rev);
-			console.log(form);
-			console.log(req.user);
-			Backup.save(form.title, req.user.username, form.doc, currentRev + 1, function(err,vals){
-				if(err) console.log("ERROR: Backup failed");
-			});
+	app.post('/save', IsAuthenticated, function(req,res){
+		var form = req.body;
+		var currentRev = parseInt(form.rev);
+		Backup.save(form.title, req.user.username, form.doc, currentRev + 1, function(err,vals){
+			if(err) console.log("ERROR: Backup failed");
+		});
 
-			Post.save(form.title, req.user.username, form.doc ,function(err,vals){
-				res.redirect('/view/' + req.body.title);
-			});
-		}
+		Post.save(form.title, req.user.username, form.doc ,function(err,vals){
+			res.redirect('/view/' + req.body.title);
+		});
 	});
 
-	app.post('/search', function(req,res){
-		if(!req.user) res.redirect('/');
-		else{
-			Post.search(req.body.query, function(err,vals){
-				res.render('search', {query: req.body.query, list: vals});
-			});
-		}
+	app.post('/search', IsAuthenticated, function(req,res){
+		Post.search(req.body.query, function(err,vals){
+			res.render('search', {query: req.body.query, list: vals});
+		});
 	});
 
-	app.get('/images/:title?', function(req,res){
-		if(!req.user) res.redirect('/');
-		else{
-			File.images(req.params.title,function(err,vals){
-				console.log(vals);
-				res.render('images', {user: req.user, title: req.params.title, images: vals});
-			});
-		}
+	app.get('/images/:title?', IsAuthenticated, function(req,res){
+		File.images(req.params.title,function(err,vals){
+			res.render('images', {user: req.user, title: req.params.title, images: vals});
+		});
 	});
 
-	app.post('/file/upload', function(req,res){
-		console.log(req)
-		console.log(req.files)
+	app.post('/file/upload', IsAuthenticated, function(req,res){
 		var filename = req.files.uploadFile.name;
 		var type = req.files.uploadFile.type;
 		var tag = req.body.tag;
@@ -91,7 +83,7 @@ exports.routes = function(app,db){
 		File.upload(filename,type,tag,title,function(err,data){
 			if(err) throw err;
 		});
-		console.log(path);
+
 		fs.mkdir(path,0777,function(err){
 			fs.readFile(req.files.uploadFile.path,function(err,data){
 				fs.writeFile(path + filename, data, function(err){
@@ -100,7 +92,5 @@ exports.routes = function(app,db){
 				});
 			});
 		});
-		
 	});
-
 }

@@ -12,7 +12,7 @@ var post = module.exports = function(db){
 
 
 		search: function(string,callback){
-			db.query('SELECT title FROM posts WHERE title like ?',
+			db.query('SELECT * FROM posts WHERE title like ?',
 			 [ '%' + string + '%'], callback);
 		}
 	}

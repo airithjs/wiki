@@ -23,11 +23,19 @@ block content
 								a preview
 							li.images(name='images')
 								a images
+							li.files(name='files')
+								a files
+							li.tableForm(name='tableForm')
+								a table Form
 					div.edit_left
 						div#preview(style='overflow:scroll;')
 							!= doc
 						div#images(style='overflow-x:hidden;display:none')
-							p ImageTab
+							p Image Tab
+						div#files(style='overflow-x:hidden;display:none')
+							p Files Tab
+						div#tableForm(style='overflow-x:hidden;display:none')
+							p Table Convert
 			div.row
 				br
 				div.col-md-12

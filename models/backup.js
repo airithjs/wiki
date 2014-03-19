@@ -12,7 +12,7 @@ var backup = module.exports = function(db){
 
 
 		search: function(string,callback){
-			db.query('SELECT title FROM backups WHERE title like ? ORDER BY rev DESC limit 1',
+			db.query('SELECT * FROM backups WHERE title like ? ORDER BY rev DESC limit 1',
 			 [ '%' + string + '%'], callback);
 		}
 	}
